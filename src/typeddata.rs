@@ -1,3 +1,4 @@
+use chrono::{Duration, NaiveDate};
 use once_cell::sync::Lazy;
 use reqwest::header::{HeaderMap, HeaderValue};
 use std::{fs::read_to_string, path::Path};
@@ -41,6 +42,7 @@ pub struct ClassInfo {
     pub week: Vec<String>,
     pub classtime: Vec<usize>,
     pub classroom: String,
+    pub daylist: Vec<String>,
 }
 
 #[allow(dead_code)]
@@ -60,6 +62,7 @@ impl ClassInfo {
             week,
             classtime,
             classroom,
+            daylist: vec![],
         }
     }
 
@@ -87,4 +90,47 @@ impl ClassInfo {
         )
         .to_string()
     }
+
+    pub fn with_startdate(&mut self, start_date: &str) -> &mut Self {
+        let firstdate = NaiveDate::parse_from_str(start_date, "%Y%m%d").unwrap();
+        for week in self.week.iter() {
+            let v: Vec<i32> = week.split("-").map(|v| v.parse::<i32>().unwrap()).collect();
+            let (mut start_week, end_week) = (v[0], v[1]);
+
+            let mut startdate =
+                firstdate + Duration::days(((start_week - 1) * 7 + self.day as i32 - 1) as i64);
+            let enddate =
+                firstdate + Duration::days(((end_week - 1) * 7 + self.day as i32 - 1) as i64);
+
+            loop {
+                if self.oe == 3
+                    || ((self.oe == 1) && (start_week % 2 == 1))
+                    || (self.oe == 2) && (start_week % 2 == 0)
+                {
+                    self.daylist.push(startdate.format("%Y%m%d").to_string());
+                }
+                startdate += Duration::days(7);
+                start_week += 1;
+                if startdate > enddate {
+                    break;
+                }
+            }
+        }
+        self
+    }
+}
+
+#[test]
+fn test_cif() {
+    let mut info = ClassInfo::new(
+        "TouHou Project通识".to_string(),
+        3,
+        1,
+        vec!["6-11".to_string()],
+        vec![1, 2],
+        "幻想乡".to_string(),
+    );
+
+    info.with_startdate("20230905");
+    dbg!(info);
 }

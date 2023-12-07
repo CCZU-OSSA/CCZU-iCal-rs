@@ -133,6 +133,7 @@ dependencies = [
 name = "cczu-ical-rs"
 version = "0.1.0"
 dependencies = [
+ "chrono",
  "icalendar",
  "once_cell",
  "regex",

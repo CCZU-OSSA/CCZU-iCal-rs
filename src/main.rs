@@ -12,7 +12,7 @@ async fn main() -> Result<()> {
     user.login().await?;
     println!("登录成功");
     let cl = user.get_classlist().await?;
-    let ical = ICal::new("".to_string(), cl);
+    let _ = ICal::new("".to_string(), cl);
 
     //ASP.NET_SessionId=rrhngysv5ipxf3wvpjmrgbpa;
     Ok(())
