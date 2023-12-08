@@ -77,7 +77,7 @@ impl ICal {
 
         // week
 
-        let fweek = NaiveDateTime::new(
+        let mut fweek = NaiveDateTime::new(
             NaiveDate::parse_from_str(&self.firstweekdate.clone(), "%Y%m%d").unwrap(),
             NaiveTime::default(),
         );
@@ -99,6 +99,7 @@ impl ICal {
             });
 
             cal.push(event.clone());
+            fweek += Duration::days(7);
         }
 
         cal

@@ -25,7 +25,7 @@ async fn main() -> Result<()> {
 
     let mut start = String::new();
     let mut rmd = String::new();
-    println!("输入此学期第一周的星期一日期(eg 20230905)");
+    println!("输入此学期第一周的星期一日期(eg 20230904)");
     stdin().read_line(&mut start).unwrap();
     let mut ical = ICal::new(start.trim().to_string(), cl);
 
