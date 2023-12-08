@@ -5,7 +5,8 @@ on:
     tags:
       - '*'
 
-permissions: write
+permissions:
+  contents: write
 
 jobs:
   publish:
@@ -31,7 +32,6 @@ jobs:
             artifact_name: cczu-ical-rs.exe
             asset_name: cczu-ical-rs-windows-amd64
     steps:
-      - uses: actions/checkout@v3
       - uses: actions/checkout@v4
       - name: Install Rust
         run: rustup update stable
