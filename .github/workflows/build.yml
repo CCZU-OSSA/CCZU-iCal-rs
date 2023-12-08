@@ -46,12 +46,12 @@ jobs:
           name: ${{ matrix.target }}_bin
           path: |
             target/${{ matrix.target }}/release/cczu-ical-rs
-            target/${{ matrix.target }}/release/cczu-ical-rs.exe
-      - name: Upload Artifact
+            target/${{ matrix.target }}/release/*.exe
+      - name: Upload CDylib
         uses: actions/upload-artifact@v3.1.2
         with:
           name: ${{ matrix.target }}_cdylib
           path: |
-            target/${{ matrix.target }}/release/cczuical.so
-            target/${{ matrix.target }}/release/cczuical.dll
-            target/${{ matrix.target }}/release/cczuical.dylib
+            target/${{ matrix.target }}/release/*.dll
+            target/${{ matrix.target }}/release/*.so
+            target/${{ matrix.target }}/release/*.dylib
