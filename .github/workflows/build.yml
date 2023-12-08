@@ -40,10 +40,18 @@ jobs:
       
       - run: cargo build --release --verbose
       - run: ls target/${{ matrix.target }}/release
+      - name: Upload Bin
+        uses: actions/upload-artifact@v3.1.2
+        with:
+          name: ${{ matrix.target }}_bin
+          path: |
+            target/${{ matrix.target }}/release/cczu-ical-rs
+            target/${{ matrix.target }}/release/cczu-ical-rs.exe
       - name: Upload Artifact
         uses: actions/upload-artifact@v3.1.2
         with:
-          name: ${{ matrix.target }}
+          name: ${{ matrix.target }}_cdylib
           path: |
-            target/${{ matrix.target }}/release/cczu-ical-rs*
-            !target/${{ matrix.target }}/release/cczu-ical-rs.d
+            target/${{ matrix.target }}/release/cczuical.so
+            target/${{ matrix.target }}/release/cczuical.dll
+            target/${{ matrix.target }}/release/cczuical.dylib
