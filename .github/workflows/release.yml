@@ -29,28 +29,28 @@ jobs:
             artifact_name: cczu-ical-rs.exe
             asset_name: cczu-ical-rs-windows-amd64
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/checkout@v4
-    - name: Install Rust
-      run: rustup update stable
-    - name: Install cross-compilation tools
-      uses: taiki-e/setup-cross-toolchain-action@v1
-      with:
-        target: ${{ matrix.target }}
-    - name: Build
-      run: cargo build --release
-    - name: Upload binaries to release
-      uses: svenstaro/upload-release-action@v2
-      with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: target/${{ matrix.target }}/release/${{ matrix.artifact_name }}
-        asset_name: ${{ matrix.asset_name }}
-        tag: ${{ github.ref }}
-    - name: Upload libraries to release
-      uses: svenstaro/upload-release-action@v2
-      with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: target/${{ matrix.target }}/release/*[dll,so,dylib]
-        asset_name: ${{ matrix.asset_name }}-lib
-        tag: ${{ github.ref }}
-        file_glob: true
+      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+      - name: Install Rust
+        run: rustup update stable
+      - name: Install cross-compilation tools
+        uses: taiki-e/setup-cross-toolchain-action@v1
+        with:
+          target: ${{ matrix.target }}
+      - name: Build
+        run: cargo build --release
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: target/${{ matrix.target }}/release/${{ matrix.artifact_name }}
+          asset_name: ${{ matrix.asset_name }}
+          tag: ${{ github.ref }}
+      - name: Upload libraries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: target/${{ matrix.target }}/release/*[dll,so,dylib]
+          asset_name: ${{ matrix.asset_name }}-lib
+          tag: ${{ github.ref }}
+          file_glob: true
