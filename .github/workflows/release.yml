@@ -5,6 +5,8 @@ on:
     tags:
       - '*'
 
+permissions: write
+
 jobs:
   publish:
     name: Publish for ${{ matrix.target }}
