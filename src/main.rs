@@ -33,7 +33,7 @@ async fn main() -> Result<()> {
     stdin().read_line(&mut rmd).unwrap();
     let cand = ical.to_ical(ical::get_reminder(rmd.trim()));
     let save_pth: &'static str;
-    if cfg!(macos) {
+    if cfg!(target_os = "macos") {
         save_pth = "./Download/class.ics"
     } else {
         save_pth = "./class.ics"
