@@ -37,7 +37,6 @@ jobs:
         uses: taiki-e/setup-cross-toolchain-action@v1
         with:
           target: ${{ matrix.target }}
-      
       - run: cargo build --release --verbose
       - run: ls target/${{ matrix.target }}/release
       - name: Upload Bin
