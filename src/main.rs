@@ -32,9 +32,14 @@ async fn main() -> Result<()> {
     println!("正在配置提醒功能,请以分钟为单位设定课前提醒时间(默认值为15)");
     stdin().read_line(&mut rmd).unwrap();
     let cand = ical.to_ical(ical::get_reminder(rmd.trim()));
-
-    let mut f = File::create("class.ics").unwrap();
+    let save_pth: &'static str;
+    if cfg!(macos) {
+        save_pth = "./Download/class.ics"
+    } else {
+        save_pth = "./class.ics"
+    }
+    let mut f = File::create(save_pth).unwrap();
     f.write_all(cand.to_string().as_bytes()).unwrap();
-    println!("已保存至 ./class.ics");
+    println!("已保存至 {}", save_pth);
     Ok(())
 }
