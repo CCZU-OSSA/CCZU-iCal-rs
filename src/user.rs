@@ -13,16 +13,7 @@ pub struct UserClient {
 }
 
 impl UserClient {
-    #[allow(unused)]
-    pub fn new(stuid: String, pwd: String) -> Self {
-        UserClient {
-            stuid,
-            pwd,
-            client: Client::builder().cookie_store(true).build().unwrap(),
-        }
-    }
-
-    pub fn new_from_str(stuid: &str, pwd: &str) -> Self {
+    pub fn new(stuid: &str, pwd: &str) -> Self {
         UserClient {
             stuid: stuid.to_string(),
             pwd: pwd.to_string(),
@@ -211,7 +202,6 @@ impl UserClient {
             .send()
             .await?;
 
-        //let cookie = &resp.cookies().collect::<Vec<Cookie>>()[0];
         Ok(()) //Ok(format!("{}={}", cookie.name(), cookie.value()))
     }
 }
