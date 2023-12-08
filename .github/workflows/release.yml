@@ -19,18 +19,23 @@ jobs:
             os: macos-latest
             artifact_name: cczu-ical-rs
             asset_name: cczu-ical-rs-macos-arm64
+            libname: libcczuical.dylib
           - target: x86_64-unknown-linux-gnu
             os: ubuntu-latest
             artifact_name: cczu-ical-rs
             asset_name: cczu-ical-rs-linux-amd64
+            libname: libcczuical.so
           - target: x86_64-apple-darwin
             os: macos-latest
             artifact_name: cczu-ical-rs
             asset_name: cczu-ical-rs-macos-amd64
+            libname: libcczuical.dylib
           - target: x86_64-pc-windows-msvc
             os: windows-latest
             artifact_name: cczu-ical-rs.exe
             asset_name: cczu-ical-rs-windows-amd64
+            libname: cczuical.dll
+
     steps:
       - uses: actions/checkout@v4
       - name: Install Rust
@@ -52,7 +57,6 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: target/${{ matrix.target }}/release/*[dll,so,dylib]
+          file: target/${{ matrix.target }}/release/${{ matrix.libname }}
           asset_name: ${{ matrix.asset_name }}-lib
           tag: ${{ github.ref }}
-          file_glob: true
