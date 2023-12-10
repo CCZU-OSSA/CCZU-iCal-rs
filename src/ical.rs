@@ -65,11 +65,13 @@ impl ICal {
                     .timestamp(create_time)
                     .uid(&uid)
                     .starts(start)
-                    .ends(end)
-                    .alarm(Alarm::display(
+                    .ends(end);
+                if reminder >= 0 {
+                    event.alarm(Alarm::display(
                         "This is an event reminder",
                         Trigger::before_start(Duration::minutes(reminder as i64)),
                     ));
+                }
 
                 cal.push(event);
             }

@@ -29,7 +29,7 @@ async fn main() -> Result<()> {
     stdin().read_line(&mut start).unwrap();
     let mut ical = ICal::new(start.trim().to_string(), cl);
 
-    println!("正在配置提醒功能,请以分钟为单位设定课前提醒时间(默认值为15)");
+    println!("正在配置提醒功能,请以分钟为单位设定课前提醒时间(默认值为15, 无需此功能请输入一个负数)");
     stdin().read_line(&mut rmd).unwrap();
     let cand = ical.to_ical(ical::get_reminder(rmd.trim()));
     let save_pth: &'static str;
@@ -40,6 +40,9 @@ async fn main() -> Result<()> {
     }
     let mut f = File::create(save_pth).unwrap();
     f.write_all(cand.to_string().as_bytes()).unwrap();
-    println!("已保存至 {}", save_pth);
+    println!("已保存至 {}...", save_pth);
+
+    stdin().read_line(&mut String::new()).unwrap();
+
     Ok(())
 }
