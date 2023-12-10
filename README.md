@@ -28,7 +28,7 @@
 
 ### 下载📦
 
-前往 [此处](https://github.com/CCZU-OSSA/CCZU-iCal-rs/release/latest) 根据你的系统下载对应的版本
+前往 [此处](https://github.com/CCZU-OSSA/CCZU-iCal-rs/releases/latest) 根据你的系统下载对应的版本
 
 带 `-lib` 的是动态链接库，用于二次开发调用，如无必要无需下载
 
