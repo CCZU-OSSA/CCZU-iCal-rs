@@ -20,7 +20,7 @@
 
 ### 导入 Windows Outlook(新)/手机(ColorOS) 日历
 
-![截图](docs\screenshot.png)
+![截图](docs/screenshot.png)
 
 ## 使用🔥
 
