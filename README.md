@@ -62,7 +62,7 @@
 
 ![完善信息](docs/选择.jpeg)
 
-附上Apple官网的教程(~~和没讲一样~~) [此处](https://support.apple.com/zh-cn/guide/iphone/ipha0d932e96/ios)
+附上Apple官网的[教程](~~和没讲一样~~) (https://support.apple.com/zh-cn/guide/iphone/ipha0d932e96/ios)
 
 ## 使用 🔥
 
