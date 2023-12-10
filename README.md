@@ -16,63 +16,33 @@
 
 小贴士：现在几乎所有手机的左侧副屏都有日历提醒功能哦，真的巨方便
 
-## 截图 🥰
+## 截图展示 🥰
 
-### 导入 Windows Outlook(新)/手机(ColorOS) 日历
+### 导入 Windows Outlook(新)/手机(ColorOS) 日历展示 📅
 
 ![截图](docs/screenshot.png)
 
-### 导入 macOS/iPhone 日历 📅
+### 导入 macOS/iPhone 的日历展示 📅
 
-## macOS 教程
-
-首先打开日历 app，右键侧边栏新建日历，取一个你喜欢的名字(新建日历便于日后批量管理)
-
-![你喜欢的名字](docs/你喜欢的名字.png)
-
-点开刚刚生成的 class.ics 文件
-
-![ics](docs/ics.png)
-
-导入就完成啦
-
-![导入](docs/导入.png)
-
-## iPhone 教程
-
-手机有点小麻烦(~~果子 🐶 史一样的操作逻辑~~)
-如何把从QQ下载的文件存到 文件app 不用我交吧,就是手机自带的那个
-找到你保存的class.ics文件
-
-![导入](docs/导入01.jpeg)
-
-长按分享,分享到邮件
-
-![准备发邮件](docs/准备发邮件.PNG)
-
-然后把文件发送到自己的另一个邮箱
-
-![发邮件](docs/邮件.PNG)
-
-然后在收件箱里点击邮件里的ics附件
-
-![导入](docs/导入02.jpeg)
-
-添加全部然后完善你的信息(添加到哪个日历📅)
-
-![完善信息](docs/选择.jpeg)
-
-附上Apple官网的[教程](https://support.apple.com/zh-cn/guide/iphone/ipha0d932e96/ios)(~~和没讲一样~~) 
+待补充
 
 ## 使用 🔥
 
 那么如何使用呢？
 
-### 下载 📦
+## 下载 📦
 
-前往 [此处](https://github.com/CCZU-OSSA/CCZU-iCal-rs/releases/latest) 根据你的系统下载对应的版本
+前往 [此处](https://github.com/CCZU-OSSA/CCZU-iCal-rs/releases/latest) 根据你的系统下载对应的版本，通常下载 `exe` 文件并直接运行即可
 
 带 `-lib` 的是动态链接库，用于二次开发调用，如无必要无需下载
+
+## 运行 🚀
+
+为确保能成功连上 CCZU 的服务器，推荐在连接校园网的情况下运行，运行时最好关闭代理
+
+### Windows 需要注意的 ⚠️
+
+12/11 由于作者偷懒没有在程序运行结束后加上让控制台暂停的设定，所以当你想查看程序运行失败时的报错内容时，请在程序目录下打开`CMD`控制台，使用`文件名.exe`的命令运行程序
 
 ### MacOS 需要注意的 ⚠️
 
@@ -82,13 +52,35 @@
 
 _PS: Linux 也需要`chmod`，不过应该都会罢（_
 
-### 生成的文件位置 🗺️
+## 生成的文件位置 🗺️
 
-MacOS 导出课表到`Downloads/`文件夹下，其他系统默认在程序文件夹下
+MacOS 导出课表到`Downloads/` 或者说 `下载/` 文件夹下，其他系统默认会生成在本程序根目录文件夹下
 
-### 将 ICalendar 文件导入日历 📄
+## 将 ICalendar(.ics) 文件导入日历 📄
 
-用日历打开 ics 文件即可，不会使用可以加群问问
+### macOS 教程
+
+打开日历 app，右键侧边栏新建日历，取一个你喜欢的名字(新建日历便于日后批量管理)
+
+![你喜欢的名字](docs/你喜欢的名字.png)
+
+点开刚刚生成的 class.ics 文件，导入就完成啦
+
+![导入](docs/导入.png)
+
+### iPhone 教程
+
+1. 在电脑上成功生成了class.ics文件后，登录你的任意一个邮箱账号，通过邮件附件的形式将ics文件发送给自己 (~~原地tp~~)
+
+2. 在 iPhone 上打开系统自带的邮件 app，在收件箱里点击邮件里的ics附件，在弹出的新页面中点击右上角蓝色🟦的**添加全部**按键
+
+3. 添加全部后完善你的信息, (选择添加到哪个日历📅) 然后就可以在日历中查看课程表了
+
+附上Apple官网的[教程](https://support.apple.com/zh-cn/guide/iphone/ipha0d932e96/ios) (~~和没讲一样~~) 
+
+## 仍有疑问？ 😣
+
+不会使用可以加群问问
 
 QQ GROUP `947560153`
 
@@ -108,12 +100,12 @@ const char* generate_ics(const char *username, const char *password, const char 
 
 ### 参数说明 📄
 
-| 参数名称       | 参数说明                     |
-| -------------- | ---------------------------- |
-| username       | 用户名/学号                  |
-| password       | 密码                         |
-| firestweekdate | 学期第一周的第一天           |
-| reminder       | 课前提醒(解析失败默认 15min) |
+| 参数名称       | 参数说明                                   |
+| -------------- | ----------------------------------------- |
+| username       | 用户名/学号                                |
+| password       | 密码,默认为身份证后六位                                     |
+| firestweekdate | 学期第一周的第一天, 格式`YYYYMMDD`          |
+| reminder       | 课前提醒 (解析失败默认 15min)               |
 
 ### 调用示例 📄
 
