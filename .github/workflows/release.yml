@@ -59,12 +59,12 @@ jobs:
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: target/${{ matrix.target }}/release/${{ matrix.artifact_name }}
-          asset_name: ${{ matrix.asset_name }}-${{ github.ref }}${{ matrix.binsuffix }}
+          asset_name: ${{ matrix.asset_name }}${{ matrix.binsuffix }}
           tag: ${{ github.ref }}
       - name: Upload libraries to release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: target/${{ matrix.target }}/release/${{ matrix.libname }}
-          asset_name: ${{ matrix.asset_name }}-${{ github.ref }}-lib${{ matrix.libsuffix }}
+          asset_name: ${{ matrix.asset_name }}-lib${{ matrix.libsuffix }}
           tag: ${{ github.ref }}
