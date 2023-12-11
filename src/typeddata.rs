@@ -10,15 +10,6 @@ pub static COMMON_HEADER: Lazy<HeaderMap> = Lazy::new(|| {
     header
 });
 
-pub static ICAL_PROP: Lazy<HashMap<&'static str, &'static str>> = Lazy::new(|| {
-    let mut map: HashMap<&str, &str> = HashMap::new();
-    map.insert("PRODID", "-//Google Inc//Google Calendar 70.9054//EN");
-    map.insert("VERSION", "2.0");
-    map.insert("METHOD", "PUBLISH");
-    map.insert("X-WR-CALNAME", "课程表");
-    map.insert("X-WR-TIMEZONE", "Asia/Shanghai");
-    map
-});
 
 pub static EVENT_PROP: Lazy<HashMap<&'static str, &'static str>> = Lazy::new(|| {
     let mut map: HashMap<&str, &str> = HashMap::new();

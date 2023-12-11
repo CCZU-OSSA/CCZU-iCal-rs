@@ -1,8 +1,8 @@
 use chrono::{Duration, NaiveDate, NaiveDateTime, NaiveTime, Utc};
-use icalendar::{Alarm, Calendar, Component, Event, EventLike, Property, Trigger};
+use icalendar::{Alarm, Calendar, Component, Event, EventLike, Trigger};
 use uuid::Uuid;
 
-use crate::typeddata::{ClassInfo, Schedule, EVENT_PROP, ICAL_PROP};
+use crate::typeddata::{ClassInfo, Schedule, EVENT_PROP};
 
 pub struct ICal {
     pub firstweekdate: String,
@@ -25,9 +25,7 @@ impl ICal {
 
     pub fn to_ical(&mut self, reminder: i32) -> Calendar {
         let mut cal = Calendar::new();
-        ICAL_PROP.iter().for_each(|(k, v)| {
-            cal.append_property(Property::new(k, v));
-        });
+        cal.timezone("Asia/Shanghai").name("课程表");
         self.classlist.iter_mut().for_each(|e| {
             e.with_startdate(&self.firstweekdate);
         });
