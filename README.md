@@ -90,12 +90,30 @@ QQ GROUP `947560153`
 
 ## 应用程序二进制接口 🔃
 
-DLL 里提供了一个接口`generate_ics`，可以使用 C 的 ABI 标准调用
+DLL 里提供了多个接口，可以使用 C 的 ABI 标准调用
 
 ### 函数描述 💬
 
+
+#### generate_ics
+
+函数会直接返回课程表文本
+
 ```C
 const char* generate_ics(const char *username, const char *password, const char *firestweekdate, const char *reminder);
+```
+
+#### generate_ics_safejson
+
+函数会返回一个json文本，包含2个键值对
+
+ - data
+ - ok
+
+如果在 `ok == true` 的情况下，data就是课程表文本，否则data为空文本
+
+```C
+const char* generate_ics_safejson(const char *username, const char *password, const char *firestweekdate, const char *reminder);
 ```
 
 ### 参数说明 📄
