@@ -5,10 +5,16 @@ use ical::ICal;
 use reqwest::Result;
 use std::fs::File;
 use std::io::{stdin, Write};
+use std::panic::set_hook;
 use user::UserClient;
 
 #[tokio::main]
 async fn main() -> Result<()> {
+    set_hook(Box::new(|v| {
+        println!("{}", v);
+        stdin().read_line(&mut String::new()).unwrap();
+    }));
+
     let mut username = String::new();
     let mut pwd = String::new();
     println!("输入学号");
@@ -29,7 +35,9 @@ async fn main() -> Result<()> {
     stdin().read_line(&mut start).unwrap();
     let mut ical = ICal::new(start.trim().to_string(), cl);
 
-    println!("正在配置提醒功能,请以分钟为单位设定课前提醒时间(默认值为15, 无需此功能请输入一个负数)");
+    println!(
+        "正在配置提醒功能,请以分钟为单位设定课前提醒时间(默认值为15, 无需此功能请输入一个负数)"
+    );
     stdin().read_line(&mut rmd).unwrap();
     let cand = ical.to_ical(ical::get_reminder(rmd.trim()));
     let save_pth: &'static str;

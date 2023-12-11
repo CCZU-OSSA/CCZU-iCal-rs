@@ -31,7 +31,7 @@ impl UserClient {
             .text()
             .await?;
         if text.is_empty() {
-            panic!("😭 程序出错，请重试")
+            panic!("😭 程序出错，请重试，请确保你连接校园网且目前教务系统开放")
         }
 
         let doc = Html::parse_document(&text);
