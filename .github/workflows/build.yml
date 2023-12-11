@@ -49,8 +49,8 @@ jobs:
         uses: actions/upload-artifact@v3.1.2
         with:
           name: ${{ matrix.os }}-${{ matrix.arch }}
-            path: |
-              build/windows/x64/runner/Release
-              build/linux/x64/runner/Release
-              build/macos/x64/runner/Release
-              build/macos/arm64/runner/Release
+          path: |
+            build/windows/x64/runner/Release
+            build/linux/x64/runner/Release
+            build/macos/x64/runner/Release
+            build/macos/arm64/runner/Release
