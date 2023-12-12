@@ -32,7 +32,7 @@
 
 ## 下载 📦
 
-前往 [此处](https://github.com/CCZU-OSSA/CCZU-iCal-rs/releases/latest) 根据你的系统下载对应的版本，通常下载 `exe` 文件并直接运行即可
+前往 [此处](https://github.com/CCZU-OSSA/CCZU-iCal-rs/releases/latest) 根据你的系统下载对应的版本，通常下载对应系统的可执行文件并运行即可，Windows后缀一般为 `.exe`
 
 带 `-lib` 的是动态链接库，用于二次开发调用，如无必要无需下载
 
@@ -58,7 +58,11 @@ MacOS 导出课表到`Downloads/` 或者说 `下载/` 文件夹下，其他系�
 
 ## 将 ICalendar(.ics) 文件导入日历 📄
 
-### macOS 教程
+### macOS 教程 🍎
+
+多图预警 ⚠️
+
+<details>
 
 打开日历 app，右键侧边栏新建日历，取一个你喜欢的名字(新建日历便于日后批量管理)
 
@@ -68,7 +72,10 @@ MacOS 导出课表到`Downloads/` 或者说 `下载/` 文件夹下，其他系�
 
 ![导入](docs/导入.png)
 
-### iPhone 教程
+</details>
+
+
+### iPhone 教程 🍎
 
 1. 在电脑上成功生成了class.ics文件后，登录你的任意一个邮箱账号，通过邮件附件的形式将ics文件发送给自己 (~~原地tp~~)
 
@@ -121,7 +128,7 @@ const char* generate_ics_safejson(const char *username, const char *password, co
 | 参数名称       | 参数说明                                   |
 | -------------- | ----------------------------------------- |
 | username       | 用户名/学号                                |
-| password       | 密码,默认为身份证后六位                                     |
+| password       | 密码,默认为身份证后六位                     |
 | firestweekdate | 学期第一周的第一天, 格式`YYYYMMDD`          |
 | reminder       | 课前提醒 (解析失败默认 15min)               |
 
