@@ -11,8 +11,6 @@ use serde::Serialize;
 use tokio::runtime;
 use user::UserClient;
 
-
-
 #[no_mangle]
 pub extern "C" fn generate_ics(
     username: *const c_char,
@@ -77,30 +75,30 @@ pub struct JsonCallback {
 }
 
 impl JsonCallback {
-    fn new(data: String, ok: bool) -> Self {
+    pub fn new(data: String, ok: bool) -> Self {
         Self { data, ok }
     }
 
-    fn default() -> Self {
+    pub fn default() -> Self {
         Self {
             data: String::new(),
             ok: false,
         }
     }
 
-    fn ok(&mut self, data: String) -> &mut Self {
+    pub fn ok(&mut self, data: String) -> &mut Self {
         self.data = data;
         self.ok = true;
         self
     }
 
-    fn err(&mut self, data: String) -> &mut Self {
+    pub fn err(&mut self, data: String) -> &mut Self {
         self.data = data;
         self.ok = false;
         self
     }
 
-    fn to_json(&self) -> String {
+    pub fn to_json(&self) -> String {
         serde_json::to_string(&self).unwrap()
     }
 }
