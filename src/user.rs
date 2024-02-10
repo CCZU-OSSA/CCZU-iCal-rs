@@ -1,8 +1,5 @@
 use regex::Regex;
-use reqwest::{
-    cookie::Cookie,
-    Client,
-};
+use reqwest::Client;
 use scraper::{ElementRef, Html, Selector};
 use std::collections::HashMap;
 use uuid::Uuid;
@@ -195,12 +192,6 @@ impl UserClient {
             return Err("获取Cookies失败".to_string());
         }
 
-        let response = response.unwrap();
-        let cookies: Vec<Cookie> = response.cookies().collect();
-
-        if cookies.is_empty() {
-            return Err("获取Cookies为空".to_string());
-        }
 
         post_data.clear();
         let mut text = String::new();
