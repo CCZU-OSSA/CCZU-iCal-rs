@@ -1,8 +1,5 @@
 use regex::Regex;
-use reqwest::{
-    cookie::Cookie,
-    Client,
-};
+use reqwest::Client;
 use scraper::{ElementRef, Html, Selector};
 use std::collections::HashMap;
 use uuid::Uuid;
@@ -170,24 +167,28 @@ impl UserClient {
             return Err("登录教务系统失败，可能由于网络问题导致".to_string());
         }
 
-        let seletor = Selector::parse(r#"input[type="hidden"]"#).unwrap();
-        let doc = Html::parse_document(&text);
-        let mut post_data: HashMap<String, String> = HashMap::new();
-        doc.select(&seletor).for_each(|e| {
-            post_data.insert(
-                e.attr("name").unwrap().to_string(),
-                e.attr("value").unwrap().to_string(),
-            );
-        });
+        let post_data = || {
+            let selector = Selector::parse(r#"input[type="hidden"]"#).unwrap();
+            let doc = Html::parse_document(&text);
+            let mut post_data: HashMap<String, String> = HashMap::new();
+            doc.select(&selector).for_each(|e| {
+                post_data.insert(
+                    e.attr("name").unwrap().to_string(),
+                    e.attr("value").unwrap().to_string(),
+                );
+            });
 
-        post_data.insert("username".to_string(), self.stuid.clone());
-        post_data.insert("password".to_string(), self.pwd.clone());
-        post_data.insert("warn".to_string(), "true".to_string());
+            post_data.insert("username".to_string(), self.stuid.clone());
+            post_data.insert("password".to_string(), self.pwd.clone());
+            post_data.insert("warn".to_string(), "true".to_string());
+            post_data
+        };
+
         let response = self
             .client
             .post(url)
             .headers(COMMON_HEADER.clone())
-            .form(&post_data)
+            .form(&post_data())
             .send()
             .await;
 
@@ -195,14 +196,6 @@ impl UserClient {
             return Err("获取Cookies失败".to_string());
         }
 
-        let response = response.unwrap();
-        let cookies: Vec<Cookie> = response.cookies().collect();
-
-        if cookies.is_empty() {
-            return Err("获取Cookies为空".to_string());
-        }
-
-        post_data.clear();
         let mut text = String::new();
 
         if let Ok(response) = self
@@ -217,17 +210,16 @@ impl UserClient {
             }
         }
 
-        let doc = Html::parse_document(&text);
-
-        let selector = Selector::parse(r#"a[href]"#).unwrap();
+        let url = || {
+            let doc = Html::parse_document(&text);
+            let selector = Selector::parse(r#"a[href]"#).unwrap();
+            let element = doc.select(&selector).collect::<Vec<ElementRef>>()[1];
+            element.attr("href").unwrap().to_string()
+        };
 
         if let Err(error) = self
             .client
-            .get(
-                doc.select(&selector).collect::<Vec<ElementRef>>()[1]
-                    .attr("href")
-                    .unwrap(),
-            )
+            .get(url())
             .headers(COMMON_HEADER.clone())
             .send()
             .await
