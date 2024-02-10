@@ -5,16 +5,20 @@ use ical::ICal;
 use reqwest::Result;
 use std::fs::File;
 use std::io::{stdin, Write};
-use std::panic::set_hook;
+use std::process::exit;
 use user::UserClient;
+
+use crate::typeddata::ClassInfo;
+
+fn block_exit(message: String) {
+    println!("{}", message);
+    println!("❌ 程序已中止");
+    stdin().read_line(&mut String::new()).unwrap();
+    exit(0);
+}
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    set_hook(Box::new(|v| {
-        println!("{}", v);
-        stdin().read_line(&mut String::new()).unwrap();
-    }));
-
     let mut username = String::new();
     let mut pwd = String::new();
     println!("输入学号");
@@ -23,17 +27,26 @@ async fn main() -> Result<()> {
     stdin().read_line(&mut pwd).unwrap();
     let user = UserClient::new(username.trim(), pwd.trim());
     println!("尝试登录...");
-    user.login().await?;
+    if let Err(message) = user.login().await {
+        block_exit(message)
+    };
     println!("登录成功");
     println!("格式化课表...");
-    let cl = user.get_classlist().await?;
+    let mut classlist: Vec<ClassInfo> = vec![];
+    let classlist_result = user.get_classlist().await;
+    if let Ok(classinfo) = classlist_result {
+        classlist = classinfo;
+    } else if let Err(message) = classlist_result {
+        block_exit(message);
+    }
+
     println!("格式化成功");
 
     let mut start = String::new();
     let mut rmd = String::new();
     println!("输入此学期第一周的星期一日期(eg 20230904)");
     stdin().read_line(&mut start).unwrap();
-    let mut ical = ICal::new(start.trim().to_string(), cl);
+    let mut ical = ICal::new(start.trim().to_string(), classlist);
 
     println!(
         "正在配置提醒功能,请以分钟为单位设定课前提醒时间(默认值为15, 无需此功能请输入一个负数)"

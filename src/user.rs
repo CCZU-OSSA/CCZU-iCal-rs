@@ -1,5 +1,8 @@
 use regex::Regex;
-use reqwest::{cookie::Cookie, Client, Result};
+use reqwest::{
+    cookie::Cookie,
+    Client,
+};
 use scraper::{ElementRef, Html, Selector};
 use std::collections::HashMap;
 use uuid::Uuid;
@@ -21,17 +24,22 @@ impl UserClient {
         }
     }
 
-    pub async fn get_classlist(&self) -> Result<Vec<ClassInfo>> {
-        let text = self
+    pub async fn get_classlist(&self) -> Result<Vec<ClassInfo>, String> {
+        let mut text = String::new();
+        if let Ok(response) = self
             .client
             .get("http://219.230.159.132/web_jxrw/cx_kb_xsgrkb.aspx")
             .headers(COMMON_HEADER.clone())
             .send()
-            .await?
-            .text()
-            .await?;
+            .await
+        {
+            if let Ok(response) = response.text().await {
+                text = response;
+            }
+        };
+
         if text.is_empty() {
-            panic!("😭 程序出错，请重试，请确保你连接校园网且目前教务系统开放")
+            return Err("😭 程序出错，请重试，请确保你连接校园网且目前教务系统开放".to_string());
         }
 
         let doc = Html::parse_document(&text);
@@ -142,16 +150,26 @@ impl UserClient {
         Ok(course_info.values().map(|e| e.clone()).collect())
     }
 
-    pub async fn login(&self) -> Result<()> {
+    pub async fn login(&self) -> Result<(), String> {
         let url = "http://jwcas.cczu.edu.cn/login";
-        let text = self
+        let mut text = String::new();
+
+        if let Ok(response) = self
             .client
             .get(url)
             .headers(COMMON_HEADER.clone())
             .send()
-            .await?
-            .text()
-            .await?;
+            .await
+        {
+            if let Ok(response) = response.text().await {
+                text = response;
+            }
+        }
+
+        if text.is_empty() {
+            return Err("登录教务系统失败，可能由于网络问题导致".to_string());
+        }
+
         let seletor = Selector::parse(r#"input[type="hidden"]"#).unwrap();
         let doc = Html::parse_document(&text);
         let mut post_data: HashMap<String, String> = HashMap::new();
@@ -165,34 +183,46 @@ impl UserClient {
         post_data.insert("username".to_string(), self.stuid.clone());
         post_data.insert("password".to_string(), self.pwd.clone());
         post_data.insert("warn".to_string(), "true".to_string());
-
-        let resp = self
+        let response = self
             .client
             .post(url)
             .headers(COMMON_HEADER.clone())
             .form(&post_data)
             .send()
-            .await?;
-        let cookies: Vec<Cookie> = resp.cookies().collect();
+            .await;
+
+        if response.is_err() {
+            return Err("获取Cookies失败".to_string());
+        }
+
+        let response = response.unwrap();
+        let cookies: Vec<Cookie> = response.cookies().collect();
+
         if cookies.is_empty() {
-            panic!("❌ 用户名/密码错误")
+            return Err("获取Cookies为空".to_string());
         }
 
         post_data.clear();
+        let mut text = String::new();
 
-        let text = self
+        if let Ok(response) = self
             .client
             .get("http://jwcas.cczu.edu.cn/login?service=http://219.230.159.132/login7_jwgl.aspx")
             .headers(COMMON_HEADER.clone())
             .send()
-            .await?
-            .text()
-            .await?;
+            .await
+        {
+            if let Ok(response) = response.text().await {
+                text = response;
+            }
+        }
+
         let doc = Html::parse_document(&text);
 
         let selector = Selector::parse(r#"a[href]"#).unwrap();
 
-        self.client
+        if let Err(error) = self
+            .client
             .get(
                 doc.select(&selector).collect::<Vec<ElementRef>>()[1]
                     .attr("href")
@@ -200,7 +230,11 @@ impl UserClient {
             )
             .headers(COMMON_HEADER.clone())
             .send()
-            .await?;
+            .await
+        {
+            println!("{}", error.to_string());
+            return Err("获取href字段失败".to_string());
+        };
 
         Ok(()) //Ok(format!("{}={}", cookie.name(), cookie.value()))
     }
