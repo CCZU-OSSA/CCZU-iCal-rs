@@ -2,14 +2,16 @@ use std::{
     ffi::{c_char, CStr, CString},
     panic::catch_unwind,
 };
-mod ical;
-mod typeddata;
-mod user;
+pub mod ical;
+pub mod typeddata;
+pub mod user;
 
 use ical::{get_reminder, ICal};
 use serde::Serialize;
 use tokio::runtime;
 use user::UserClient;
+
+
 
 #[no_mangle]
 pub extern "C" fn generate_ics(
@@ -18,7 +20,7 @@ pub extern "C" fn generate_ics(
     firstweekdate: *const c_char,
     reminder: *const c_char,
 ) -> *const c_char {
-    CString::new(inner(
+    CString::new(generate_ics_rs(
         translate(username),
         translate(password),
         translate(firstweekdate),
@@ -35,7 +37,7 @@ pub extern "C" fn generate_ics_safejson(
     firstweekdate: *const c_char,
     reminder: *const c_char,
 ) -> *const c_char {
-    CString::new(inner_json(
+    CString::new(generate_ics_safejson_rs(
         translate(username),
         translate(password),
         translate(firstweekdate),
@@ -49,7 +51,7 @@ fn translate(v: *const c_char) -> &'static str {
     unsafe { CStr::from_ptr(v) }.to_str().unwrap()
 }
 
-pub fn inner(
+pub fn generate_ics_rs(
     username: &'static str,
     password: &'static str,
     firstweekdate: &'static str,
@@ -103,7 +105,7 @@ impl JsonCallback {
     }
 }
 
-pub fn inner_json(
+pub fn generate_ics_safejson_rs(
     username: &'static str,
     password: &'static str,
     firstweekdate: &'static str,
