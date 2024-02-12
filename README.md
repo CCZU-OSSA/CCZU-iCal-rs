@@ -106,27 +106,27 @@ DLL 里提供了多个接口，可以使用 C 的 ABI 标准调用
 const char* generate_ics(const char *username, const char *password, const char *firestweekdate, const char *reminder);
 ```
 
-#### generate_ics_safejson
+#### generate_ics_json
 
 函数会返回一个json文本，包含2个键值对
 
  - data
  - ok
 
-如果在 `ok == true` 的情况下，data就是课程表文本，否则data为空文本
+如果在 `ok == true` 的情况下，data就是课程表文本，否则data为错误信息
 
 ```C
-const char* generate_ics_safejson(const char *username, const char *password, const char *firestweekdate, const char *reminder);
+const char* generate_ics_json(const char *username, const char *password, const char *firestweekdate, const char *reminder);
 ```
 
 ### 参数说明 📄
 
-| 参数名称       | 参数说明                                   |
-| -------------- | ----------------------------------------- |
-| username       | 用户名/学号                                |
-| password       | 密码,默认为身份证后六位                     |
-| firestweekdate | 学期第一周的第一天, 格式`YYYYMMDD`          |
-| reminder       | 课前提醒 (解析失败默认 15min)               |
+| 参数名称       | 参数说明                           |
+| -------------- | ---------------------------------- |
+| username       | 用户名/学号                        |
+| password       | 密码,默认为身份证后六位            |
+| firestweekdate | 学期第一周的第一天, 格式`YYYYMMDD` |
+| reminder       | 课前提醒 (解析失败默认 15min)      |
 
 ### 调用示例 📄
 
@@ -135,7 +135,7 @@ from ctypes import CDLL, c_char_p
 
 cs = lambda ps: c_char_p(ps.encode("utf-8"))
 
-rdl = CDLL("./cczuical.dll")
+rdl = CDLL("./cczu_ical_rs.dll")
 rdl.generate_ics.restype = c_char_p
 data = rdl.generate_ics(cs("学号"), cs("密码"), cs("20230904"), cs("15"))
 with open("class.ics", "w", encoding="utf-8") as f:

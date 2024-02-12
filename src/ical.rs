@@ -10,8 +10,12 @@ pub struct ICal {
     pub classlist: Vec<ClassInfo>,
 }
 
-pub fn get_reminder(reminder: &str) -> i32 {
-    reminder.parse::<i32>().unwrap_or(15)
+pub fn get_reminder(reminder: &str) -> Option<i32> {
+    if reminder.is_empty() {
+        None
+    } else {
+        Some(reminder.parse::<i32>().unwrap_or(15))
+    }
 }
 
 impl ICal {
@@ -23,7 +27,7 @@ impl ICal {
         }
     }
 
-    pub fn to_ical(&mut self, reminder: i32) -> Calendar {
+    pub fn to_ical(&mut self, reminder: Option<i32>) -> Calendar {
         let mut cal = Calendar::new();
         cal.timezone("Asia/Shanghai").name("课程表");
         self.classlist.iter_mut().for_each(|e| {
@@ -64,7 +68,7 @@ impl ICal {
                     .uid(&uid)
                     .starts(start)
                     .ends(end);
-                if reminder >= 0 {
+                if let Some(reminder) = reminder {
                     event.alarm(Alarm::display(
                         "This is an event reminder",
                         Trigger::before_start(Duration::minutes(reminder as i64)),

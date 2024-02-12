@@ -1,13 +1,10 @@
-use std::{
-    ffi::{c_char, CStr, CString},
-    panic::catch_unwind,
-};
 pub mod ical;
 pub mod typeddata;
 pub mod user;
 
 use ical::{get_reminder, ICal};
 use serde::Serialize;
+use std::ffi::{c_char, CStr, CString};
 use tokio::runtime;
 use user::UserClient;
 
@@ -29,13 +26,13 @@ pub extern "C" fn generate_ics(
 }
 
 #[no_mangle]
-pub extern "C" fn generate_ics_safejson(
+pub extern "C" fn generate_ics_json(
     username: *const c_char,
     password: *const c_char,
     firstweekdate: *const c_char,
     reminder: *const c_char,
 ) -> *const c_char {
-    CString::new(generate_ics_safejson_rs(
+    CString::new(generate_ics_json_rs(
         translate(username),
         translate(password),
         translate(firstweekdate),
@@ -61,7 +58,9 @@ pub fn generate_ics_rs(
         .unwrap()
         .block_on(async {
             let client = UserClient::new(username, password);
-            client.login().await.unwrap();
+            if let Err(message) = client.login().await {
+                return message;
+            };
             let cl = client.get_classlist().await.unwrap();
             let mut ical = ICal::new(firstweekdate.to_string(), cl);
             ical.to_ical(get_reminder(reminder)).to_string()
@@ -103,35 +102,33 @@ impl JsonCallback {
     }
 }
 
-pub fn generate_ics_safejson_rs(
+pub fn generate_ics_json_rs(
     username: &'static str,
     password: &'static str,
     firstweekdate: &'static str,
     reminder: &'static str,
 ) -> String {
-    let result = catch_unwind(|| {
-        let mut data = JsonCallback::new(String::new(), false);
-        runtime::Builder::new_current_thread()
-            .enable_all()
-            .build()
-            .unwrap()
-            .block_on(async {
-                let client = UserClient::new(username, password);
-                client.login().await.unwrap();
-                match client.get_classlist().await {
-                    Ok(cl) => {
-                        let mut ical = ICal::new(firstweekdate.to_string(), cl);
-                        data.ok(ical.to_ical(get_reminder(reminder)).to_string())
-                            .to_json()
-                    }
-                    Err(e) => data.err(e.to_string()).to_json(),
+    let mut data = JsonCallback::new(String::new(), false);
+    runtime::Builder::new_current_thread()
+        .enable_all()
+        .build()
+        .unwrap()
+        .block_on(async {
+            let client = UserClient::new(username, password);
+            client.login().await.unwrap();
+            match client.get_classlist().await {
+                Ok(cl) => {
+                    let mut ical = ICal::new(firstweekdate.to_string(), cl);
+                    data.ok(ical.to_ical(get_reminder(reminder)).to_string())
+                        .to_json()
                 }
-            })
-    });
+                Err(e) => data.err(e.to_string()).to_json(),
+            }
+        });
 
-    if result.is_ok() {
-        result.unwrap()
-    } else {
-        JsonCallback::default().to_json()
-    }
+    data.to_json()
+}
+
+pub fn version() -> &'static str {
+    "0.1.1"
 }

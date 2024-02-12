@@ -49,7 +49,7 @@ async fn main() -> Result<()> {
     let mut ical = ICal::new(start.trim().to_string(), classlist);
 
     println!(
-        "正在配置提醒功能,请以分钟为单位设定课前提醒时间(默认值为15, 无需此功能请输入一个负数)"
+        "正在配置提醒功能,请以分钟为单位设定课前提醒时间(eg 15),不配置直接回车即可"
     );
     stdin().read_line(&mut rmd).unwrap();
     let cand = ical.to_ical(ical::get_reminder(rmd.trim()));
