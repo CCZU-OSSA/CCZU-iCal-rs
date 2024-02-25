@@ -64,6 +64,7 @@ impl ICal {
 
                 event
                     .summary(&summary)
+                    .location(&info.classroom)
                     .timestamp(create_time)
                     .uid(&uid)
                     .starts(start)
@@ -95,8 +96,8 @@ impl ICal {
                 .uid(&uid)
                 .summary(&summary)
                 .timestamp(create_time)
-                .starts(fweek)
-                .ends(fweek + Duration::days(7));
+                .starts(fweek.date())
+                .ends(fweek.date() + Duration::days(7));
 
             EVENT_PROP.iter().for_each(|(k, v)| {
                 event.add_property(k, v);
