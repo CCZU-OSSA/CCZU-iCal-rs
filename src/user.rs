@@ -111,7 +111,7 @@ impl UserClient {
 
                             let classname = nl[0].clone();
 
-                            let re = Regex::new(r#"(\w+)? *([单双]?) *((\d+-\d+,?)+)"#).unwrap();
+                            let re = Regex::new(r#"(\S+)? *([单双]?) *((\d+-\d+,?)+)"#).unwrap();
                             let pattern = course.replace(&classname, "").trim().to_string();
                             let Some(data) = re.captures(pattern.as_str()) else {
                                 panic!("Course information parsing abnormal")
@@ -230,4 +230,14 @@ impl UserClient {
 
         Ok(()) //Ok(format!("{}={}", cookie.name(), cookie.value()))
     }
+}
+
+#[test]
+fn test() {
+    let re = Regex::new(r#"(\w*)? *([单双]?) *((\d+-\d+,?)+)"#).unwrap();
+    let Some(data) = re.captures("北京,新加坡,爱尔兰 4-11,9-88") else {
+        panic!("Course information parsing abnormal")
+    };
+
+    println!("{:?}", data);
 }
