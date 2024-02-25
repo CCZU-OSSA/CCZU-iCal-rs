@@ -8,6 +8,8 @@
 
 这个项目就是为了帮你把课表转化为 ics 文件而存在的，尝试一下用日历看课表吧！
 
+这个项目是命令行应用，如果您需要更方便地在各个平台上使用，请查看 [CCZU-OSSA/cczu-helper](https://github.com/CCZU-OSSA/cczu-helper)
+
 ### 特点 ✨
 
 - 在 Windows、macOS、iOS、Android、Windows Phone 等系统，以及各大邮箱服务都有着强大的原生支持

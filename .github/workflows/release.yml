@@ -3,7 +3,7 @@ name: Release
 on:
   push:
     tags:
-      - '*'
+      - "*"
 
 permissions:
   contents: write
@@ -19,28 +19,28 @@ jobs:
             os: macos-latest
             artifact_name: cczu-ical-rs
             asset_name: cczu-ical-rs-macos-arm64
-            libname: libcczuical.dylib
+            libname: libcczu_ical_rs.dylib
             libsuffix: .dylib
-            binsuffix:
+            binsuffix: ""
           - target: x86_64-unknown-linux-gnu
             os: ubuntu-latest
             artifact_name: cczu-ical-rs
             asset_name: cczu-ical-rs-linux-amd64
-            libname: libcczuical.so
+            libname: libcczu_ical_rs.so
             libsuffix: .so
-            binsuffix:
+            binsuffix: ""
           - target: x86_64-apple-darwin
             os: macos-latest
             artifact_name: cczu-ical-rs
             asset_name: cczu-ical-rs-macos-amd64
-            libname: libcczuical.dylib
+            libname: libcczu_ical_rs.dylib
             libsuffix: .dylib
-            binsuffix:
+            binsuffix: ""
           - target: x86_64-pc-windows-msvc
             os: windows-latest
             artifact_name: cczu-ical-rs.exe
             asset_name: cczu-ical-rs-windows-amd64
-            libname: cczuical.dll
+            libname: cczu_ical_rs.dll
             libsuffix: .dll
             binsuffix: .exe
 
