@@ -104,9 +104,8 @@ impl UserClient {
                                     target[index + 1] =
                                         format!("{}/{}", course.clone(), target[index + 1]);
                                     continue;
-                                } else {
-                                    panic!("Unable to resolve course name correctly")
                                 }
+                                return Err(format!("Unable to resolve course name correctly"));
                             }
 
                             let classname = nl[0].clone();
