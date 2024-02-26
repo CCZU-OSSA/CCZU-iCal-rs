@@ -42,7 +42,6 @@ impl ICal {
                 .clone()
                 .end_time;
             let create_time = Utc::now();
-            let summary = format!("{} | {}", info.name, info.classroom);
             for day in info.daylist.iter() {
                 let uid = format!("{}@gmail.com", Uuid::new_v4());
                 let start = NaiveDateTime::parse_from_str(
@@ -63,7 +62,7 @@ impl ICal {
                 });
 
                 event
-                    .summary(&summary)
+                    .summary(&info.name)
                     .location(&info.classroom)
                     .timestamp(create_time)
                     .uid(&uid)
@@ -71,7 +70,7 @@ impl ICal {
                     .ends(end);
                 if let Some(reminder) = reminder {
                     event.alarm(Alarm::display(
-                        "This is an event reminder",
+                        "课前提醒",
                         Trigger::before_start(Duration::minutes(reminder as i64)),
                     ));
                 }
