@@ -9,7 +9,7 @@ use crate::typeddata::{ClassInfo, COMMON_HEADER};
 pub struct UserClient {
     pub stuid: String,
     pub pwd: String,
-    client: Client,
+    pub client: Client,
 }
 
 impl UserClient {
